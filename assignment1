@@ -1,0 +1,80 @@
+//const Joi = require('joi');
+const express = require('express');
+const app = express();
+
+app.use(express.json());
+
+let cartItems = [
+    { id: 1, itemName: "Soap", quantity: 1 },
+    { id: 2, itemName: "Shampoo", quantity: 1 }
+];
+
+let carts = [
+    {
+        cartID: 1, cartItems: cartItems[0]
+    }];
+
+let users = [
+    {
+        id: 1, firstName: "Jason", lastName: "Voorhees", email: "jason13@live.com",
+        cart: carts[0]
+    }
+];
+
+
+
+app.get('/', (req, res) => {
+        res.send('Hello World');
+    });
+
+app.get('/users', (req, res) => {
+        res.send(users);
+    });
+    
+
+// User functions
+app.post('/users', (req, res) => {
+    const user = {
+        id: users.length + 1,
+        firstName: req.body.firstName,
+        lastName: req.body.lastName,
+        email: req.body.email,
+    };
+    users.push(user);
+    res.send(user);
+});
+
+app.post('/cart/:cartID/cartItem', (req, res) => {
+    let cartFound = carts.find(c => c.cartID === parseInt(req.params.cartID));
+    cartFound = {
+        cartItems: req.body.cartItems,
+        quantity: req.body.quantity
+    }
+    carts.push(cartFound);
+    res.send(carts);
+});
+
+app.get('/users/:userID', (req, res) => {
+    const user = users.find(c => c.id === parseInt(req.params.userID));
+    if (!user) res.status(404).send('User with given ID was not found');
+    res.send(user);
+});
+
+// Cart functions
+
+app.get('/users/:userID/cart', (req, res) => {
+    const user = users.find(c => c.id === parseInt(req.params.userID));
+    const cart = user.cart;
+    if (!user) res.status(404).send('Cart could not be found');
+    res.send(cart);
+});
+
+app.delete('/users/:userID/cart', (req, res) => {
+
+});
+
+
+
+
+const port = process.env.PORT || 3000;
+app.listen(port, () => console.log(`Listening on port ${port}...`));
