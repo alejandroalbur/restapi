@@ -1,42 +1,65 @@
-<html>
-<head>
-<title>users.js</title>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<style type="text/css">
-.s0 { color: #cc7832;}
-.s1 { color: #a9b7c6;}
-.s2 { color: #6a8759;}
-.s3 { color: #808080;}
-</style>
-</head>
-<body bgcolor="#2b2b2b">
-<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
-<tr><td><center>
-<font face="Arial, Helvetica" color="#000000">
-users.js</font>
-</center></td></tr></table>
-<pre><span class="s0">const </span><span class="s1">mongoose = require(</span><span class="s2">'mongoose'</span><span class="s1">)</span><span class="s0">;</span>
+const express = require('express');
+const router = express.Router();
+const User = require('../models/users');
 
-<span class="s0">const </span><span class="s1">UserSchema = mongoose.Schema({</span>
-    <span class="s1">firstName: {</span>
-        <span class="s1">type: String</span><span class="s0">,</span>
-        <span class="s1">required: </span><span class="s0">true</span>
-    <span class="s1">}</span><span class="s0">,</span>
+//gets ALL USERS
+router.get('/', async (req, res) => {
+    try{
+        const allUsers = await User.find();
+        res.json(allUsers);
+    } catch(err){
+        res.json({message:err});
+    }
+});
 
-    <span class="s1">lastName: {</span>
-        <span class="s1">type: String</span><span class="s0">,</span>
-        <span class="s1">required: </span><span class="s0">true</span>
-    <span class="s1">}</span><span class="s0">,</span>
+//gets specific user info
+router.get('/:userID', async (req, res) => {
+    try {
+        const foundUser = await User.findById(req.params.userID)
+        res.json(foundUser);
+    } catch(err){
+        res.json({message:err});
+    }
+});
 
-    <span class="s1">email: {</span>
-        <span class="s1">type: String</span><span class="s0">,</span>
-        <span class="s1">required: </span><span class="s0">true</span>
-    <span class="s1">}</span><span class="s0">,</span>
-    <span class="s1">cart: []</span>
-        <span class="s3">//default: undefined</span>
-<span class="s1">})</span><span class="s0">;</span>
+//creates a new user
+router.post('/users', async (req, res) => {
 
-<span class="s1">module.exports = mongoose.model(</span><span class="s2">'Users'</span><span class="s0">, </span><span class="s1">UserSchema)</span><span class="s0">;</span>
-</pre>
-</body>
-</html>
+    const newUser = new User({
+        firstName: req.body.firstName,
+        lastName: req.body.lastName,
+        email: req.body.email,
+        cart: [{}]
+    });
+
+    try {
+        const savedUser = await newUser.save();
+        res.json(savedUser);
+    } catch(err){
+        res.status(404);
+    }
+
+    });
+
+//delete all items in the users cart
+router.delete('/:userID/cart', (req, res) => {
+    const user = users.find(c => c.id === parseInt(req.params.userID));
+    if (!user) res.status(404).send('User with given ID was not found');
+    const cartTarget = user.cart;
+
+    const cartID = carts.indexOf(cartTarget);
+    carts[cartID].cartItems.splice(cartID, carts[cartID].cartItems.length);
+
+    console.log(cartID);
+    res.send(cartTarget);
+});
+
+//gets specific user's cart
+router.get('/:userID/cart', (req, res) => {
+    const user = users.find(c => c.id === parseInt(req.params.userID));
+    const cart = user.cart;
+    if (!user) res.status(404).send('Cart could not be found');
+    res.send(cart);
+});
+
+module.exports = router;
