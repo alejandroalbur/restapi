@@ -1,29 +1,63 @@
-<html>
-<head>
-<title>storeItems.js</title>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<style type="text/css">
-.s0 { color: #cc7832;}
-.s1 { color: #a9b7c6;}
-.s2 { color: #6a8759;}
-</style>
-</head>
-<body bgcolor="#2b2b2b">
-<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
-<tr><td><center>
-<font face="Arial, Helvetica" color="#000000">
-storeItems.js</font>
-</center></td></tr></table>
-<pre><span class="s0">const </span><span class="s1">mongoose = require(</span><span class="s2">'mongoose'</span><span class="s1">)</span><span class="s0">;</span>
+const express = require('express');
+const StoreItem = require('../models/storeItems');
+const router = express.Router();
 
+//sample data
+let storeItems = [
+    { id: 1, product: "Kitchen knife" },
+    { id: 2, product: "Chainsaw" },
+    { id: 3, product: "Infernal powers" }
+];
 
-<span class="s0">const </span><span class="s1">StoreItemSchema = mongoose.Schema({</span>
-    <span class="s1">product: {</span>
-        <span class="s1">type: String</span><span class="s0">,</span>
-        <span class="s1">required: </span><span class="s0">true</span>
-    <span class="s1">}</span>
-<span class="s1">})</span><span class="s0">;</span>
+let carts = [
+    {
+        cartID: 1, cartItems: [
+            { itemID: 1, quantity: 1 },
+            { itemID: 2, quantity: 1 },
+            {itemID: 3, quantity: 1}
+        ],
+    }];
 
-<span class="s1">module.exports = mongoose.model(</span><span class="s2">'StoreItem'</span><span class="s0">, </span><span class="s1">StoreItemSchema)</span><span class="s0">;</span></pre>
-</body>
-</html>
+let users = [
+    {
+        id: 1, firstName: "Jason", lastName: "Voorhees", email: "jason13@live.com",
+        cart: carts[0]
+    }
+];
+
+//gets all store items
+router.get('/', async (req, res) => {
+    try{
+        const allStoreItems = await StoreItem.find();
+        res.json(allStoreItems);
+    } catch(err){
+        res.json({message:err});
+    }
+});
+
+//gets SPECIFIC store item
+router.get('/StoreItem/:StoreItemID', async(req, res) => {
+    try {
+        const foundStoreItem = await StoreItem.findById(req.params.StoreItemID)
+        res.json(foundStoreItem);
+    } catch(err){
+        res.json({message:err});
+    }
+});
+
+//posts a new store item
+router.post('/StoreItem', async (req, res) => {
+
+    const newStoreItem = new StoreItem({
+        id: storeItems.length + 1,
+        product: req.body.product
+    });
+    try {
+        const savedStoreItem = await newStoreItem.save();
+        res.json(savedStoreItem);
+    } catch(err){
+        res.status(404);
+    }
+});
+
+module.exports = router;
