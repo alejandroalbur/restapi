@@ -1,52 +1,32 @@
-<html>
-<head>
-<title>app.js</title>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<style type="text/css">
-.s0 { color: #a9b7c6;}
-.s1 { color: #cc7832;}
-.s2 { color: #6a8759;}
-.s3 { color: #808080;}
-</style>
-</head>
-<body bgcolor="#2b2b2b">
-<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
-<tr><td><center>
-<font face="Arial, Helvetica" color="#000000">
-app.js</font>
-</center></td></tr></table>
-<pre>  <span class="s1">const </span><span class="s0">express = require(</span><span class="s2">'express'</span><span class="s0">)</span><span class="s1">;</span>
-  <span class="s1">const </span><span class="s0">mongoose = require(</span><span class="s2">'mongoose'</span><span class="s0">)</span><span class="s1">;</span>
-  <span class="s1">const </span><span class="s0">app = express()</span><span class="s1">;</span>
-  <span class="s1">const </span><span class="s0">bodyParser = require(</span><span class="s2">'body-parser'</span><span class="s0">)</span><span class="s1">;</span>
-  <span class="s0">require(</span><span class="s2">'dotenv/config'</span><span class="s0">)</span><span class="s1">;</span>
+  const express = require('express');
+  const mongoose = require('mongoose');
+  const app = express();
+  const bodyParser = require('body-parser');
+  require('dotenv/config');
 
-  <span class="s0">app.use(express.json())</span><span class="s1">;</span>
+  app.use(express.json());
 
-  <span class="s3">//Import Routes</span>
-  <span class="s1">const </span><span class="s0">usersRoute = require(</span><span class="s2">'./routes/users'</span><span class="s0">)</span><span class="s1">;</span>
-  <span class="s1">const </span><span class="s0">cartsRoute = require(</span><span class="s2">'./routes/carts'</span><span class="s0">)</span><span class="s1">;</span>
-  <span class="s1">const </span><span class="s0">storeItemsRoute = require (</span><span class="s2">'./routes/storeItems'</span><span class="s0">)</span><span class="s1">;</span>
+  //Import Routes
+  const usersRoute = require('./routes/users');
+  const cartsRoute = require('./routes/carts');
+  const storeItemsRoute = require ('./routes/storeItems');
 
-  <span class="s3">//Middleware</span>
-  <span class="s0">app.use(</span><span class="s2">'/users'</span><span class="s1">, </span><span class="s0">usersRoute)</span><span class="s1">;</span>
-  <span class="s0">app.use(</span><span class="s2">'/cart'</span><span class="s1">, </span><span class="s0">cartsRoute)</span><span class="s1">;</span>
-  <span class="s0">app.use(</span><span class="s2">'/StoreItem'</span><span class="s1">, </span><span class="s0">storeItemsRoute)</span><span class="s1">;</span>
-  <span class="s0">app.use(bodyParser.json())</span><span class="s1">;</span>
+  //Middleware
+  app.use('/users', usersRoute);
+  app.use('/cart', cartsRoute);
+  app.use('/StoreItem', storeItemsRoute);
+  app.use(bodyParser.json());
 
-  <span class="s3">//database setup</span>
-  <span class="s0">mongoose.connect(process.env.DB_CONNECTION</span><span class="s1">,</span>
-      <span class="s0">{ useNewUrlParser: </span><span class="s1">true, </span><span class="s0">useUnifiedTopology: </span><span class="s1">true</span><span class="s0">}</span><span class="s1">,</span>
-    <span class="s0">() =&gt; console.log(</span><span class="s2">'connected to DB'</span><span class="s0">)</span>
-  <span class="s0">)</span><span class="s1">;</span>
+  //database setup
+  mongoose.connect(process.env.DB_CONNECTION,
+      { useNewUrlParser: true, useUnifiedTopology: true},
+    () => console.log('connected to DB')
+  );
 
-  <span class="s3">//Routes</span>
-  <span class="s0">app.get(</span><span class="s2">'/'</span><span class="s1">, </span><span class="s0">(req</span><span class="s1">,</span><span class="s0">res) =&gt; {</span>
-    <span class="s0">res.send(</span><span class="s2">'Homepage'</span><span class="s0">)</span><span class="s1">;</span>
-  <span class="s0">})</span>
+  //Routes
+  app.get('/', (req,res) => {
+    res.send('Homepage');
+  })
 
 
-<span class="s0">module.exports = app</span><span class="s1">;</span>
-</pre>
-</body>
-</html>
+module.exports = app;
