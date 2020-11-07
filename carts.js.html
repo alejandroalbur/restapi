@@ -1,0 +1,35 @@
+<html>
+<head>
+<title>carts.js</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #cc7832;}
+.s1 { color: #a9b7c6;}
+.s2 { color: #6a8759;}
+</style>
+</head>
+<body bgcolor="#2b2b2b">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+carts.js</font>
+</center></td></tr></table>
+<pre><span class="s0">const </span><span class="s1">mongoose = require(</span><span class="s2">'mongoose'</span><span class="s1">)</span><span class="s0">;</span>
+
+
+<span class="s0">const </span><span class="s1">CartItemSchema = mongoose.Schema({</span>
+    <span class="s1">product: {</span>
+        <span class="s1">type: mongoose.ObjectId</span><span class="s0">,</span>
+        <span class="s1">ref: </span><span class="s2">'StoreItem'</span><span class="s0">,</span>
+        <span class="s1">required: </span><span class="s0">true</span>
+    <span class="s1">}</span><span class="s0">,</span>
+
+    <span class="s1">quantity:{</span>
+        <span class="s1">type: Number</span><span class="s0">,</span>
+        <span class="s1">required: </span><span class="s0">true</span>
+    <span class="s1">}</span>
+<span class="s1">})</span><span class="s0">;</span>
+
+<span class="s1">module.exports = mongoose.model(</span><span class="s2">'CartItem'</span><span class="s0">, </span><span class="s1">CartItemSchema)</span><span class="s0">;</span></pre>
+</body>
+</html>
