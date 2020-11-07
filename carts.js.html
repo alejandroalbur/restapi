@@ -1,35 +1,44 @@
-<html>
-<head>
-<title>carts.js</title>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<style type="text/css">
-.s0 { color: #cc7832;}
-.s1 { color: #a9b7c6;}
-.s2 { color: #6a8759;}
-</style>
-</head>
-<body bgcolor="#2b2b2b">
-<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
-<tr><td><center>
-<font face="Arial, Helvetica" color="#000000">
-carts.js</font>
-</center></td></tr></table>
-<pre><span class="s0">const </span><span class="s1">mongoose = require(</span><span class="s2">'mongoose'</span><span class="s1">)</span><span class="s0">;</span>
+const StoreItem = require('../models/carts');
+const router = express.Router();
 
 
-<span class="s0">const </span><span class="s1">CartItemSchema = mongoose.Schema({</span>
-    <span class="s1">product: {</span>
-        <span class="s1">type: mongoose.ObjectId</span><span class="s0">,</span>
-        <span class="s1">ref: </span><span class="s2">'StoreItem'</span><span class="s0">,</span>
-        <span class="s1">required: </span><span class="s0">true</span>
-    <span class="s1">}</span><span class="s0">,</span>
 
-    <span class="s1">quantity:{</span>
-        <span class="s1">type: Number</span><span class="s0">,</span>
-        <span class="s1">required: </span><span class="s0">true</span>
-    <span class="s1">}</span>
-<span class="s1">})</span><span class="s0">;</span>
+//posts a new cart item in a specific cart
+router.post('/:cartID/cartItem', async (req, res) => {
+    const storeItems = await StoreItem.find({});
+    const targetCart = await User.findById(req.params.cartID)
+    const assignedItem = storeItems[Math.floor(Math.random()*storeItems.length)];
 
-<span class="s1">module.exports = mongoose.model(</span><span class="s2">'CartItem'</span><span class="s0">, </span><span class="s1">CartItemSchema)</span><span class="s0">;</span></pre>
-</body>
-</html>
+    const newCartItem = new CartItem({
+        product: assignedItem,
+        quantity: req.body.quantity
+    });
+
+    try {
+        targetCart.cart.push(newCartItem);
+        targetCart.save();
+        res.send(targetCart);
+    } catch(err){
+        res.status(404);
+    }
+});
+
+//delete speicific item from specific cart
+router.delete('/:CartID/cartItem/:cartItemID', (req, res) => {
+    const cartTarget = carts.find(c => c.cartID === parseInt(req.params.CartID));
+    if (!cartTarget) res.status(404).send('Whoa that cart does not exist');
+
+    const itemTarget = cartTarget.cartItems.find(c => c.itemID === parseInt(req.params.cartItemID));
+    if (!itemTarget) res.status(404).send('Whoa that cart item does not exist');
+
+    const deleteItemIndex = cartTarget.cartItems.indexOf(itemTarget);
+    cartTarget.cartItems.splice(deleteItemIndex, 1);
+
+    console.log(itemTarget)
+    res.send(itemTarget);
+});
+
+
+
+
+module.exports = router;
