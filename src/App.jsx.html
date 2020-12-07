@@ -1,0 +1,112 @@
+<html>
+<head>
+<title>App.jsx</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #cc7832;}
+.s1 { color: #a9b7c6;}
+.s2 { color: #6a8759;}
+.s3 { color: #e8bf6a;}
+.s4 { color: #bababa;}
+.s5 { color: #808080;}
+</style>
+</head>
+<body bgcolor="#2b2b2b">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+App.jsx</font>
+</center></td></tr></table>
+<pre><span class="s0">import </span><span class="s1">React</span><span class="s0">, </span><span class="s1">{useState} from </span><span class="s2">&quot;react&quot;</span><span class="s0">;</span>
+<span class="s0">import </span><span class="s1">logo from </span><span class="s2">'./logo.svg'</span><span class="s0">;</span>
+<span class="s0">import </span><span class="s2">'./App.css'</span><span class="s0">;</span>
+<span class="s0">import </span><span class="s1">{Login} from </span><span class="s2">&quot;./components/login/index&quot;</span><span class="s0">;</span>
+
+<span class="s0">const </span><span class="s1">PAGE_PRODUCTS = </span><span class="s2">'products'</span><span class="s0">;</span>
+<span class="s0">const </span><span class="s1">PAGE_CART = </span><span class="s2">'cart'</span><span class="s0">;</span>
+
+<span class="s0">function </span><span class="s1">App() {</span>
+    <span class="s0">const </span><span class="s1">[cart</span><span class="s0">, </span><span class="s1">setCart] = useState([])</span><span class="s0">;</span>
+    <span class="s0">const </span><span class="s1">[page</span><span class="s0">, </span><span class="s1">setPage] = useState(</span><span class="s2">'products'</span><span class="s1">)</span><span class="s0">;</span>
+
+    <span class="s0">const </span><span class="s1">[products] = useState([</span>
+        <span class="s1">{</span>
+            <span class="s1">name: </span><span class="s2">'Shiny Object'</span><span class="s0">,</span>
+            <span class="s1">cost: </span><span class="s2">'$499.99'</span><span class="s0">,</span>
+            <span class="s1">image: </span><span class="s2">'https://fxfactory.com/downloads/docs/noiseindustries/fxfactorypro/Thumbnails/Star%20Shine.jpg'</span><span class="s0">,</span>
+        <span class="s1">}</span><span class="s0">,</span>
+        <span class="s1">{</span>
+            <span class="s1">name: </span><span class="s2">'Gamer Tears'</span><span class="s0">,</span>
+            <span class="s1">cost: </span><span class="s2">'$0.99'</span><span class="s0">,</span>
+            <span class="s1">image: </span><span class="s2">'https://i.pinimg.com/originals/17/64/4d/17644d0b77b31de2d222371564f29850.jpg'</span><span class="s0">,</span>
+        <span class="s1">}</span><span class="s0">,</span>
+        <span class="s1">{</span>
+            <span class="s1">name: </span><span class="s2">'The Declaration of Independence'</span><span class="s0">,</span>
+            <span class="s1">cost: </span><span class="s2">'$A Nicolas Cage'</span><span class="s0">,</span>
+            <span class="s1">image: </span><span class="s2">'https://dynaimage.cdn.cnn.com/cnn/c_fill,g_auto,w_1200,h_675,ar_16:9/https%3A%2F%2Fcdn.cnn.com%2Fcnnnext%2Fdam%2Fassets%2F180628174143-02-declaration-of-independence-1776.jpg'</span><span class="s0">,</span>
+        <span class="s1">}</span>
+    <span class="s1">])</span><span class="s0">;</span>
+
+    <span class="s0">const </span><span class="s1">addToCart = (product) =&gt; {</span>
+        <span class="s1">console.log(</span><span class="s2">'we are in addtocart'</span><span class="s1">)</span><span class="s0">;</span>
+        <span class="s1">setCart([...cart</span><span class="s0">, </span><span class="s1">{...product}])</span><span class="s0">;</span>
+    <span class="s1">}</span><span class="s0">;</span>
+
+    <span class="s0">const </span><span class="s1">removeFromCart = (productToRemove) =&gt; {</span>
+        <span class="s1">setCart(cart.filter(product =&gt; product !== productToRemove))</span>
+    <span class="s1">}</span>
+
+    <span class="s0">const </span><span class="s1">navigateTo = (nextPage) =&gt; {</span>
+        <span class="s1">setPage(nextPage)</span><span class="s0">;</span>
+    <span class="s1">}</span><span class="s0">;</span>
+
+    <span class="s0">const </span><span class="s1">renderProducts = () =&gt;</span>
+        <span class="s3">&lt;&gt;</span>
+            <span class="s3">&lt;h2&gt;</span><span class="s1">Products</span><span class="s3">&lt;/h2&gt;</span>
+            <span class="s3">&lt;div </span><span class="s4">className</span><span class="s2">=&quot;products&quot;</span><span class="s3">&gt;</span>
+                <span class="s1">{products.map((product</span><span class="s0">, </span><span class="s1">idx) =&gt; (</span>
+                    <span class="s3">&lt;div </span><span class="s4">className</span><span class="s2">=&quot;product&quot; </span><span class="s4">key</span><span class="s2">=</span><span class="s1">{idx}</span><span class="s3">&gt;</span>
+                        <span class="s3">&lt;h3&gt;</span><span class="s1">{product.name}</span><span class="s3">&lt;/h3&gt;</span>
+                        <span class="s3">&lt;h4&gt;</span><span class="s1">{product.cost}</span><span class="s3">&lt;/h4&gt;</span>
+                        <span class="s3">&lt;img </span><span class="s4">src</span><span class="s2">=</span><span class="s1">{product.image} </span><span class="s4">alt</span><span class="s2">=</span><span class="s1">{product.name}</span><span class="s3">/&gt;</span>
+                        <span class="s3">&lt;button </span><span class="s4">onClick</span><span class="s2">=</span><span class="s1">{() =&gt; addToCart(product)}</span><span class="s3">&gt;</span><span class="s1">Add to Cart</span><span class="s3">&lt;/button&gt;</span>
+                    <span class="s3">&lt;/div&gt;</span>
+                <span class="s1">))}</span>
+            <span class="s3">&lt;/div&gt;</span>
+        <span class="s3">&lt;/&gt;</span>
+
+    <span class="s0">const </span><span class="s1">renderCart = () =&gt;</span>
+        <span class="s3">&lt;&gt;</span>
+            <span class="s3">&lt;h2&gt;</span><span class="s1">Cart</span><span class="s3">&lt;/h2&gt;</span>
+            <span class="s3">&lt;div </span><span class="s4">className</span><span class="s2">=&quot;products&quot;</span><span class="s3">&gt;</span>
+                <span class="s1">{cart.map((product</span><span class="s0">, </span><span class="s1">idx) =&gt; (</span>
+                    <span class="s3">&lt;div </span><span class="s4">className</span><span class="s2">=&quot;product&quot; </span><span class="s4">key</span><span class="s2">=</span><span class="s1">{idx}</span><span class="s3">&gt;</span>
+                        <span class="s3">&lt;h3&gt;</span><span class="s1">{product.name}</span><span class="s3">&lt;/h3&gt;</span>
+                        <span class="s3">&lt;h4&gt;</span><span class="s1">{product.cost}</span><span class="s3">&lt;/h4&gt;</span>
+                        <span class="s3">&lt;img </span><span class="s4">src</span><span class="s2">=</span><span class="s1">{product.image} </span><span class="s4">alt</span><span class="s2">=</span><span class="s1">{product.name}</span><span class="s3">/&gt;</span>
+                        <span class="s3">&lt;button </span><span class="s4">onClick</span><span class="s2">=</span><span class="s1">{() =&gt; removeFromCart(product)}</span><span class="s3">&gt;</span><span class="s1">Remove</span>
+                        <span class="s3">&lt;/button&gt;</span>
+                        <span class="s1">{</span><span class="s5">/*&lt;button onClick={() =&gt; addToCart(product)}&gt;Add to Cart&lt;/button&gt;*/</span><span class="s1">}</span>
+                    <span class="s3">&lt;/div&gt;</span>
+                <span class="s1">))}</span>
+            <span class="s3">&lt;/div&gt;</span>
+        <span class="s3">&lt;/&gt;</span>
+
+    <span class="s0">return </span><span class="s1">(</span>
+        <span class="s3">&lt;div </span><span class="s4">className</span><span class="s2">=&quot;App&quot;</span><span class="s3">&gt;</span>
+            <span class="s3">&lt;Login/&gt;</span>
+            <span class="s3">&lt;header&gt;</span>
+                <span class="s3">&lt;button </span><span class="s4">onClick</span><span class="s2">=</span><span class="s1">{() =&gt; navigateTo(PAGE_CART)}</span><span class="s3">&gt;</span><span class="s1">Go To Cart ({cart.length})</span><span class="s3">&lt;/button&gt;</span>
+                <span class="s3">&lt;button </span><span class="s4">onClick</span><span class="s2">=</span><span class="s1">{() =&gt; navigateTo(PAGE_PRODUCTS)}</span><span class="s3">&gt;</span><span class="s1">Go Back to Store</span>
+                <span class="s3">&lt;/button&gt;</span>
+            <span class="s3">&lt;/header&gt;</span>
+            <span class="s1">{page === PAGE_PRODUCTS &amp;&amp; renderProducts()}</span>
+            <span class="s1">{page === PAGE_CART &amp;&amp; renderCart()}</span>
+        <span class="s3">&lt;/div&gt;</span>
+    <span class="s1">)</span><span class="s0">;</span>
+<span class="s1">}</span>
+
+<span class="s0">export default </span><span class="s1">App</span><span class="s0">;</span>
+</pre>
+</body>
+</html>
